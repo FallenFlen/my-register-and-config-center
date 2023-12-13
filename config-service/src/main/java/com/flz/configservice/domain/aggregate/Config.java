@@ -3,7 +3,7 @@ package com.flz.configservice.domain.aggregate;
 import com.flz.common.domain.DomainAggregateRoot;
 import com.flz.common.enums.config.ConfigStatus;
 import com.flz.common.enums.config.ConfigType;
-import com.flz.configservice.domain.command.ConfigSaveCommand;
+import com.flz.configservice.domain.command.ConfigUpsertCommand;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,7 +27,7 @@ public class Config extends DomainAggregateRoot {
     private String description;
     private String md5;
 
-    public static Config create(ConfigSaveCommand command) {
+    public static Config create(ConfigUpsertCommand command) {
         Config config = Config.builder()
                 .content(command.getContent())
                 .type(command.getType())
@@ -39,5 +39,12 @@ public class Config extends DomainAggregateRoot {
         config.generateId();
         config.createBySystem();
         return config;
+    }
+
+    public void update(ConfigUpsertCommand command) {
+        this.content = command.getContent();
+        this.description = command.getDescription();
+        this.type = command.getType();
+        updateBySystem();
     }
 }

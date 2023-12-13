@@ -2,10 +2,10 @@ package com.flz.configservice.application.service;
 
 import com.flz.configservice.converter.ConfigConverter;
 import com.flz.configservice.domain.aggregate.Config;
-import com.flz.configservice.domain.command.ConfigSaveCommand;
+import com.flz.configservice.domain.command.ConfigUpsertCommand;
 import com.flz.configservice.domain.repository.ConfigDomainRepository;
 import com.flz.configservice.presentation.dto.ConfigResponseDTO;
-import com.flz.configservice.presentation.dto.ConfigSaveRequestDTO;
+import com.flz.configservice.presentation.dto.ConfigUpsertRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,9 +30,17 @@ public class ConfigService {
     }
 
     @Transactional
-    public void save(ConfigSaveRequestDTO requestDTO) {
-        ConfigSaveCommand command = converter.toCommand(requestDTO);
+    public void save(ConfigUpsertRequestDTO requestDTO) {
+        ConfigUpsertCommand command = converter.toCommand(requestDTO);
         Config config = Config.create(command);
+        configDomainRepository.save(config);
+    }
+
+    @Transactional
+    public void edit(String id, ConfigUpsertRequestDTO requestDTO) {
+        Config config = configDomainRepository.findById(id);
+        ConfigUpsertCommand command = converter.toCommand(requestDTO);
+        config.update(command);
         configDomainRepository.save(config);
     }
 }

@@ -1,10 +1,10 @@
 package com.flz.configservice.converter;
 
 import com.flz.configservice.domain.aggregate.Config;
-import com.flz.configservice.domain.command.ConfigSaveCommand;
+import com.flz.configservice.domain.command.ConfigUpsertCommand;
 import com.flz.configservice.infrastructure.persist.dataobject.ConfigDO;
 import com.flz.configservice.presentation.dto.ConfigResponseDTO;
-import com.flz.configservice.presentation.dto.ConfigSaveRequestDTO;
+import com.flz.configservice.presentation.dto.ConfigUpsertRequestDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
@@ -19,5 +19,5 @@ public interface ConfigConverter {
 
     ConfigDO toDO(Config config);
 
-    ConfigSaveCommand toCommand(ConfigSaveRequestDTO requestDTO);
+    ConfigUpsertCommand toCommand(ConfigUpsertRequestDTO requestDTO);
 }
