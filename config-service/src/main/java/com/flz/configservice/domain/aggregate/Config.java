@@ -43,6 +43,7 @@ public class Config extends DomainAggregateRoot {
 
     public void update(ConfigUpsertCommand command) {
         this.content = command.getContent();
+        this.md5 = DigestUtils.md5DigestAsHex(command.getContent().getBytes(StandardCharsets.UTF_8));
         this.description = command.getDescription();
         this.type = command.getType();
         updateBySystem();
