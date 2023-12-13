@@ -16,4 +16,8 @@ public class ResponseResult {
     public static ResponseResult success() {
         return ResponseResult.of("Success", null);
     }
+
+    public static ResponseResult success(Object data) {
+        return ResponseResult.of("Success", data);
+    }
 }
