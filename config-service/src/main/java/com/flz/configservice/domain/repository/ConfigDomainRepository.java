@@ -27,4 +27,8 @@ public class ConfigDomainRepository {
                 .map(converter::toDomain)
                 .orElseThrow(() -> new BusinessException("config not found with id:" + id));
     }
+
+    public void save(Config config) {
+        configJdbcRepository.save(converter.toDO(config));
+    }
 }
