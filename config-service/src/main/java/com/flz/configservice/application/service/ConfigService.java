@@ -43,4 +43,9 @@ public class ConfigService {
         config.update(command);
         configDomainRepository.save(config);
     }
+
+    @Transactional
+    public void delete(String id) {
+        configDomainRepository.deleteById(id);
+    }
 }

@@ -4,6 +4,7 @@ import com.flz.configservice.application.service.ConfigService;
 import com.flz.configservice.presentation.dto.ConfigResponseDTO;
 import com.flz.configservice.presentation.dto.ConfigUpsertRequestDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,5 +40,10 @@ public class ConfigController {
     @PutMapping("/{id}")
     public void edit(@PathVariable("id") String id, @RequestBody @Valid ConfigUpsertRequestDTO requestDTO) {
         configService.edit(id, requestDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable("id") String id){
+        configService.delete(id);
     }
 }

@@ -31,4 +31,8 @@ public class ConfigDomainRepository {
     public void save(Config config) {
         configJdbcRepository.save(converter.toDO(config));
     }
+
+    public void deleteById(String id) {
+        configJdbcRepository.deleteById(id);
+    }
 }
