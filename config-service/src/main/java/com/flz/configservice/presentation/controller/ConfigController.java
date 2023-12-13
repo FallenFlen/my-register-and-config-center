@@ -2,6 +2,7 @@ package com.flz.configservice.presentation.controller;
 
 import com.flz.configservice.application.service.ConfigService;
 import com.flz.configservice.presentation.dto.ConfigResponseDTO;
+import com.flz.configservice.presentation.dto.ConfigSwitchStatusRequestDTO;
 import com.flz.configservice.presentation.dto.ConfigUpsertRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -45,5 +46,10 @@ public class ConfigController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") String id){
         configService.delete(id);
+    }
+
+    @PutMapping("/{id}/switch-status")
+    public void switchStatus(@PathVariable("id") String id, @RequestBody @Valid ConfigSwitchStatusRequestDTO requestDTO){
+        configService.switchStatus(id, requestDTO.getConfigStatus());
     }
 }

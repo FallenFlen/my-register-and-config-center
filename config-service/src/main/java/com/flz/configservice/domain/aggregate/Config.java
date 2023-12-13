@@ -47,4 +47,8 @@ public class Config extends DomainAggregateRoot {
         this.type = command.getType();
         updateBySystem();
     }
+
+    public void switchStatus(ConfigStatus status) {
+        this.status = status;
+    }
 }

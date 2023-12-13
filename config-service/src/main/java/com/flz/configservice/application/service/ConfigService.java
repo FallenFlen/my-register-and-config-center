@@ -1,5 +1,6 @@
 package com.flz.configservice.application.service;
 
+import com.flz.common.enums.config.ConfigStatus;
 import com.flz.configservice.converter.ConfigConverter;
 import com.flz.configservice.domain.aggregate.Config;
 import com.flz.configservice.domain.command.ConfigUpsertCommand;
@@ -47,5 +48,12 @@ public class ConfigService {
     @Transactional
     public void delete(String id) {
         configDomainRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void switchStatus(String id, ConfigStatus configStatus) {
+        Config config = configDomainRepository.findById(id);
+        config.switchStatus(configStatus);
+        configDomainRepository.save(config);
     }
 }
