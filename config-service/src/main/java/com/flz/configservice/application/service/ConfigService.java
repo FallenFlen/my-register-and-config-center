@@ -20,4 +20,8 @@ public class ConfigService {
                 .map(converter::toDTO)
                 .collect(Collectors.toList());
     }
+
+    public ConfigResponseDTO findById(String id) {
+        return converter.toDTO(configDomainRepository.findById(id));
+    }
 }

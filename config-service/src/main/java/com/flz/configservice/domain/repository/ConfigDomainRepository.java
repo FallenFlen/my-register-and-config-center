@@ -1,5 +1,6 @@
 package com.flz.configservice.domain.repository;
 
+import com.flz.common.exception.BusinessException;
 import com.flz.configservice.converter.ConfigConverter;
 import com.flz.configservice.domain.aggregate.Config;
 import com.flz.configservice.infrastructure.repository.jdbc.ConfigJdbcRepository;
@@ -19,5 +20,11 @@ public class ConfigDomainRepository {
         return configJdbcRepository.findAll().stream()
                 .map(converter::toDomain)
                 .collect(Collectors.toList());
+    }
+
+    public Config findById(String id) {
+        return configJdbcRepository.findById(id)
+                .map(converter::toDomain)
+                .orElseThrow(() -> new BusinessException("config not found with id:" + id));
     }
 }
