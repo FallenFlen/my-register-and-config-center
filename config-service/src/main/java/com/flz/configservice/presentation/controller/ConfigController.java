@@ -44,12 +44,12 @@ public class ConfigController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") String id){
+    public void delete(@PathVariable("id") String id) {
         configService.delete(id);
     }
 
     @PutMapping("/{id}/switch-status")
-    public void switchStatus(@PathVariable("id") String id, @RequestBody @Valid ConfigSwitchStatusRequestDTO requestDTO){
+    public void switchStatus(@PathVariable("id") String id, @RequestBody @Valid ConfigSwitchStatusRequestDTO requestDTO) {
         configService.switchStatus(id, requestDTO.getConfigStatus());
     }
 }
