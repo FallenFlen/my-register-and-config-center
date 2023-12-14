@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: mydemo
+
+server:
+  port: 10087
+
+myconfigcenter:
+  url: http://localhost:10080
