@@ -11,6 +11,7 @@ public class ConfigResponseDTO extends BaseResponseDTO {
     private ConfigType type;
     private ConfigStatus status;
     private String belongingApplicationName;
+    private String fileName;
     private String description;
     private String md5;
 
@@ -79,6 +80,14 @@ public class ConfigResponseDTO extends BaseResponseDTO {
 
     public void setMd5(String md5) {
         this.md5 = md5;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }
 
