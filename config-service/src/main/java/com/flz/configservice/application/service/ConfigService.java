@@ -68,4 +68,10 @@ public class ConfigService {
         config.switchStatus(configStatus);
         configDomainRepository.save(config);
     }
+
+    public ConfigResponseDTO findUnique(String belongingApplicationName, String fileName, ConfigType type) {
+        return configDomainRepository.findByBelongingApplicationNameAndFileNameAndType(belongingApplicationName, fileName, type)
+                .map(converter::toDTO)
+                .orElse(new ConfigResponseDTO());
+    }
 }

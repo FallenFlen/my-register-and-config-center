@@ -1,5 +1,6 @@
 package com.flz.configservice.presentation.controller;
 
+import com.flz.common.enums.config.ConfigType;
 import com.flz.configservice.application.service.ConfigService;
 import com.flz.configservice.presentation.dto.ConfigResponseDTO;
 import com.flz.configservice.presentation.dto.ConfigSwitchStatusRequestDTO;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -51,5 +53,12 @@ public class ConfigController {
     @PutMapping("/{id}/switch-status")
     public void switchStatus(@PathVariable("id") String id, @RequestBody @Valid ConfigSwitchStatusRequestDTO requestDTO) {
         configService.switchStatus(id, requestDTO.getConfigStatus());
+    }
+
+    @GetMapping("/unique")
+    public ConfigResponseDTO findUnique(@RequestParam("belongingApplicationName") String belongingApplicationName,
+                                        @RequestParam("fileName") String fileName,
+                                        @RequestParam("type") ConfigType type) {
+        return configService.findUnique(belongingApplicationName, fileName, type);
     }
 }
