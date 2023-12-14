@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor
@@ -13,11 +14,13 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class ConfigUpsertRequestDTO {
-    @NotNull
+    @NotBlank
     private String content;
     @NotNull
     private ConfigType type;
-    @NotNull
+    @NotBlank
     private String belongingApplicationName;
+    @NotBlank
+    private String fileName;
     private String description;
 }

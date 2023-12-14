@@ -19,6 +19,7 @@ public class ConfigDO extends BaseDO {
     private ConfigType type;
     private ConfigStatus status;
     private String belongingApplicationName;
+    private String fileName;
     private String description;
     private String md5;
 }

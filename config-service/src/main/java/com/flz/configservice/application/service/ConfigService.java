@@ -1,6 +1,8 @@
 package com.flz.configservice.application.service;
 
 import com.flz.common.enums.config.ConfigStatus;
+import com.flz.common.enums.config.ConfigType;
+import com.flz.common.exception.BusinessException;
 import com.flz.configservice.converter.ConfigConverter;
 import com.flz.configservice.domain.aggregate.Config;
 import com.flz.configservice.domain.command.ConfigUpsertCommand;
@@ -33,6 +35,7 @@ public class ConfigService {
     @Transactional
     public void save(ConfigUpsertRequestDTO requestDTO) {
         ConfigUpsertCommand command = converter.toCommand(requestDTO);
+        checkDuplication(command.getBelongingApplicationName(), command.getFileName(), command.getType());
         Config config = Config.create(command);
         configDomainRepository.save(config);
     }
@@ -41,8 +44,17 @@ public class ConfigService {
     public void edit(String id, ConfigUpsertRequestDTO requestDTO) {
         Config config = configDomainRepository.findById(id);
         ConfigUpsertCommand command = converter.toCommand(requestDTO);
+        checkDuplication(command.getBelongingApplicationName(), command.getFileName(), command.getType());
         config.update(command);
         configDomainRepository.save(config);
+    }
+
+    private void checkDuplication(String belongingApplicationName,
+                                  String fileName,
+                                  ConfigType type) {
+        if (configDomainRepository.findByBelongingApplicationNameAndFileNameAndType(belongingApplicationName, fileName, type).isPresent()) {
+            throw new BusinessException(String.format("config duplicated:%s", String.join(belongingApplicationName, fileName, type.getSuffix())));
+        }
     }
 
     @Transactional

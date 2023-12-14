@@ -15,4 +15,5 @@ public class ConfigUpsertCommand {
     private ConfigType type;
     private String belongingApplicationName;
     private String description;
+    private String fileName;
 }

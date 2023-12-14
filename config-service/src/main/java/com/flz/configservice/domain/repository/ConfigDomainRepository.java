@@ -1,5 +1,6 @@
 package com.flz.configservice.domain.repository;
 
+import com.flz.common.enums.config.ConfigType;
 import com.flz.common.exception.BusinessException;
 import com.flz.configservice.converter.ConfigConverter;
 import com.flz.configservice.domain.aggregate.Config;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
@@ -15,6 +17,13 @@ import java.util.stream.Collectors;
 public class ConfigDomainRepository {
     private final ConfigJdbcRepository configJdbcRepository;
     private final ConfigConverter converter = ConfigConverter.INSTANCE;
+
+    public Optional<Config> findByBelongingApplicationNameAndFileNameAndType(String belongingApplicationName,
+                                                                             String fileName,
+                                                                             ConfigType type) {
+        return configJdbcRepository.findByBelongingApplicationNameAndFileNameAndType(belongingApplicationName, fileName, type)
+                .map(converter::toDomain);
+    }
 
     public List<Config> findAll() {
         return configJdbcRepository.findAll().stream()

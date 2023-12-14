@@ -24,6 +24,7 @@ public class Config extends DomainAggregateRoot {
     private ConfigType type;
     private ConfigStatus status;
     private String belongingApplicationName;
+    private String fileName;
     private String description;
     private String md5;
 
@@ -46,6 +47,7 @@ public class Config extends DomainAggregateRoot {
         this.md5 = DigestUtils.md5DigestAsHex(command.getContent().getBytes(StandardCharsets.UTF_8));
         this.description = command.getDescription();
         this.type = command.getType();
+        this.fileName = command.getFileName();
         updateBySystem();
     }
 
