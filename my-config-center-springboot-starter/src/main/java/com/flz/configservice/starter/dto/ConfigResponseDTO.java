@@ -25,13 +25,7 @@ public class ConfigResponseDTO extends BaseResponseDTO {
         this.md5 = md5;
     }
 
-    public ConfigResponseDTO(String content, ConfigType type, ConfigStatus status, String belongingApplicationName, String description, String md5) {
-        this.content = content;
-        this.type = type;
-        this.status = status;
-        this.belongingApplicationName = belongingApplicationName;
-        this.description = description;
-        this.md5 = md5;
+    public ConfigResponseDTO() {
     }
 
     public String getContent() {

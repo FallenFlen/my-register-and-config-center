@@ -2,13 +2,12 @@ package com.flz.configservice.starter.config;
 
 import com.flz.common.enums.config.ConfigType;
 import com.flz.configservice.starter.client.ConfigCenterClient;
+import com.flz.configservice.starter.client.ConfigCenterClientFactory;
 import com.flz.configservice.starter.dto.ConfigResponseDTO;
-import org.springframework.beans.BeansException;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.env.EnvironmentPostProcessor;
+import com.flz.configservice.starter.properties.ConfigCenterProperties;
+import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.boot.env.YamlPropertySourceLoader;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationListener;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertySource;
 import org.springframework.core.io.ByteArrayResource;
@@ -17,15 +16,19 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-public class ConfigCenterEnvironmentPostProcessor implements EnvironmentPostProcessor, ApplicationContextAware {
-    private static ApplicationContext applicationContext;
+public class ConfigCenterEventListener implements ApplicationListener<ApplicationEnvironmentPreparedEvent> {
 
     @Override
-    public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
-        ConfigCenterClient configCenterClient = applicationContext.getBean(ConfigCenterClient.class);
-        String applicationName = environment.getProperty("spring.application.name");
+    public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
+
+        ConfigurableEnvironment environment = event.getEnvironment();
+        String url = environment.resolvePlaceholders("${myconfigcenter.url}");
+        ConfigCenterProperties configCenterProperties = new ConfigCenterProperties(url);
+        ConfigCenterClient configCenterClient = ConfigCenterClientFactory.getInstance(configCenterProperties);
+
         // todo 支持active profiles        String[] activeProfiles = environment.getActiveProfiles();
         String fileName = "application";
+        String applicationName = environment.resolvePlaceholders("${spring.application.name}");
         ConfigResponseDTO uniqueYmlConfig = configCenterClient.findUniqueConfig(applicationName, fileName, ConfigType.YML);
         if (uniqueYmlConfig.getContent() != null) {
             YamlPropertySourceLoader yamlPropertySourceLoader = new YamlPropertySourceLoader();
@@ -40,8 +43,4 @@ public class ConfigCenterEnvironmentPostProcessor implements EnvironmentPostProc
         }
     }
 
-    @Override
-    public void setApplicationContext(ApplicationContext ctx) throws BeansException {
-        applicationContext = ctx;
-    }
 }

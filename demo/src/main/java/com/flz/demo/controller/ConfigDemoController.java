@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/config")
 public class ConfigDemoController {
-    @Value("${myconf.testv1}:DEFAULT")
+    @Value("${myconf:DEFAULT}")
     private String testVa1;
 
     @GetMapping("/test1")

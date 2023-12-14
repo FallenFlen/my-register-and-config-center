@@ -36,6 +36,7 @@ public class Config extends DomainAggregateRoot {
                 .description(command.getDescription())
                 .status(ConfigStatus.ENABLE)
                 .md5(DigestUtils.md5DigestAsHex(command.getContent().getBytes(StandardCharsets.UTF_8)))
+                .fileName(command.getFileName())
                 .build();
         config.generateId();
         config.createBySystem();
