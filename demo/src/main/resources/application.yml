@@ -9,3 +9,7 @@ server:
 
 myconfigcenter:
   url: http://localhost:10080
+
+demo-prop-test:
+  str1: wtf
+  int1: 233
