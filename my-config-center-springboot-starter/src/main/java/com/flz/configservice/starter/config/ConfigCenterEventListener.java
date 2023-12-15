@@ -26,10 +26,14 @@ public class ConfigCenterEventListener implements ApplicationListener<Applicatio
         ConfigCenterProperties configCenterProperties = new ConfigCenterProperties(url);
         ConfigCenterClient configCenterClient = ConfigCenterClientFactory.getInstance(configCenterProperties);
 
-        // todo 支持active profiles        String[] activeProfiles = environment.getActiveProfiles();
+        String[] activeProfiles = environment.getActiveProfiles();
         String fileName = "application";
+        if (activeProfiles.length > 0) {
+            fileName += "-" + activeProfiles[0];
+        }
         String applicationName = environment.resolvePlaceholders("${spring.application.name}");
         ConfigResponseDTO uniqueYmlConfig = configCenterClient.findUniqueConfig(applicationName, fileName, ConfigType.YML);
+        // todo 支持properties
         if (uniqueYmlConfig.getContent() != null) {
             YamlPropertySourceLoader yamlPropertySourceLoader = new YamlPropertySourceLoader();
             ByteArrayResource resource = new ByteArrayResource(uniqueYmlConfig.getContent().getBytes(StandardCharsets.UTF_8));
