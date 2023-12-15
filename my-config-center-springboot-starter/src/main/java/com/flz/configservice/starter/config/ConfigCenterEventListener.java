@@ -6,6 +6,8 @@ import com.flz.configservice.starter.client.ConfigCenterClientFactory;
 import com.flz.configservice.starter.dto.ConfigResponseDTO;
 import com.flz.configservice.starter.properties.ConfigCenterProperties;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
+import org.springframework.boot.env.PropertiesPropertySourceLoader;
+import org.springframework.boot.env.PropertySourceLoader;
 import org.springframework.boot.env.YamlPropertySourceLoader;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -20,30 +22,36 @@ public class ConfigCenterEventListener implements ApplicationListener<Applicatio
 
     @Override
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
-
         ConfigurableEnvironment environment = event.getEnvironment();
         String url = environment.resolvePlaceholders("${myconfigcenter.url}");
         ConfigCenterProperties configCenterProperties = new ConfigCenterProperties(url);
         ConfigCenterClient configCenterClient = ConfigCenterClientFactory.getInstance(configCenterProperties);
-
         String[] activeProfiles = environment.getActiveProfiles();
         String fileName = "application";
         if (activeProfiles.length > 0) {
             fileName += "-" + activeProfiles[0];
         }
         String applicationName = environment.resolvePlaceholders("${spring.application.name}");
-        ConfigResponseDTO uniqueYmlConfig = configCenterClient.findUniqueConfig(applicationName, fileName, ConfigType.YML);
-        // todo 支持properties
-        if (uniqueYmlConfig.getContent() != null) {
-            YamlPropertySourceLoader yamlPropertySourceLoader = new YamlPropertySourceLoader();
-            ByteArrayResource resource = new ByteArrayResource(uniqueYmlConfig.getContent().getBytes(StandardCharsets.UTF_8));
-            String fullFileName = uniqueYmlConfig.getFileName() + uniqueYmlConfig.getType().getSuffix();
-            try {
-                List<PropertySource<?>> ymlPropertySource = yamlPropertySourceLoader.load(fullFileName, resource);
-                ymlPropertySource.forEach(it -> environment.getPropertySources().addFirst(it));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+
+        ConfigResponseDTO uniquePropertiesConfig = configCenterClient.findUniqueConfig(applicationName, fileName, ConfigType.PROPERTIES);
+        if (uniquePropertiesConfig.getContent() != null) { // properties 优先于yml
+            insertConfigIntoEnv(uniquePropertiesConfig, new PropertiesPropertySourceLoader(), environment);
+        } else { // yml
+            ConfigResponseDTO uniqueYmlConfig = configCenterClient.findUniqueConfig(applicationName, fileName, ConfigType.YML);
+            if (uniqueYmlConfig.getContent() != null) {
+                insertConfigIntoEnv(uniqueYmlConfig, new YamlPropertySourceLoader(), environment);
             }
+        }
+    }
+
+    private void insertConfigIntoEnv(ConfigResponseDTO config, PropertySourceLoader propertySourceLoader, ConfigurableEnvironment environment) {
+        ByteArrayResource resource = new ByteArrayResource(config.getContent().getBytes(StandardCharsets.UTF_8));
+        String fullFileName = config.getFileName() + config.getType().getSuffix();
+        try {
+            List<PropertySource<?>> ymlPropertySource = propertySourceLoader.load(fullFileName, resource);
+            ymlPropertySource.forEach(it -> environment.getPropertySources().addFirst(it));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
