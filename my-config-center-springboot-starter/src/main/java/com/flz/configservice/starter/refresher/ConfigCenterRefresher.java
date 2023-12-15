@@ -19,6 +19,7 @@ import org.springframework.core.env.PropertySource;
 import org.springframework.core.io.ByteArrayResource;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -34,8 +35,15 @@ public class ConfigCenterRefresher implements ApplicationEventPublisherAware, En
 
     @PostConstruct
     public void startSchedule() {
+        LOGGER.info("start scheduled fetching config");
         // 每10秒拉取最新的config进行刷新
         SCHEDULED_EXECUTOR.scheduleAtFixedRate(this::refresh, 10, 10, TimeUnit.SECONDS);
+    }
+
+    @PreDestroy
+    public void shutdown() {
+        LOGGER.info("stop scheduled fetching config");
+        SCHEDULED_EXECUTOR.shutdown();
     }
 
     private void refresh() {
