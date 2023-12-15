@@ -20,9 +20,4 @@ public class ConfigCenterAutoConfiguration {
     public DynamicValuePostProcessor dynamicValuePostProcessor() {
         return new DynamicValuePostProcessor();
     }
-
-    @Bean
-    public ConfigCenterEventListener configCenterEventListener() {
-        return new ConfigCenterEventListener();
-    }
 }
