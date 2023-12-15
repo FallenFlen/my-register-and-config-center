@@ -1,5 +1,6 @@
 package com.flz.configservice.infrastructure.repository.jdbc;
 
+import com.flz.common.enums.config.ConfigStatus;
 import com.flz.common.enums.config.ConfigType;
 import com.flz.configservice.infrastructure.persist.dataobject.ConfigDO;
 import org.springframework.data.repository.CrudRepository;
@@ -11,6 +12,11 @@ public interface ConfigJdbcRepository extends CrudRepository<ConfigDO, String> {
     List<ConfigDO> findAll();
 
     Optional<ConfigDO> findByBelongingApplicationNameAndFileNameAndType(String belongingApplicationName,
-                                                                        String fileName,
-                                                                        ConfigType type);
+                                                                                 String fileName,
+                                                                                 ConfigType type);
+
+    Optional<ConfigDO> findByBelongingApplicationNameAndFileNameAndTypeAndStatus(String belongingApplicationName,
+                                                                                 String fileName,
+                                                                                 ConfigType type,
+                                                                                 ConfigStatus configStatus);
 }

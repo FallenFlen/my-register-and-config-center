@@ -1,5 +1,6 @@
 package com.flz.configservice.domain.repository;
 
+import com.flz.common.enums.config.ConfigStatus;
 import com.flz.common.enums.config.ConfigType;
 import com.flz.common.exception.BusinessException;
 import com.flz.configservice.converter.ConfigConverter;
@@ -22,6 +23,14 @@ public class ConfigDomainRepository {
                                                                              String fileName,
                                                                              ConfigType type) {
         return configJdbcRepository.findByBelongingApplicationNameAndFileNameAndType(belongingApplicationName, fileName, type)
+                .map(converter::toDomain);
+    }
+
+    public Optional<Config> findByBelongingApplicationNameAndFileNameAndTypeAndStatus(String belongingApplicationName,
+                                                                             String fileName,
+                                                                             ConfigType type,
+                                                                             ConfigStatus status) {
+        return configJdbcRepository.findByBelongingApplicationNameAndFileNameAndTypeAndStatus(belongingApplicationName, fileName, type, status)
                 .map(converter::toDomain);
     }
 

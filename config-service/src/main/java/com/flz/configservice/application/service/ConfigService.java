@@ -70,7 +70,7 @@ public class ConfigService {
     }
 
     public ConfigResponseDTO findUnique(String belongingApplicationName, String fileName, ConfigType type) {
-        return configDomainRepository.findByBelongingApplicationNameAndFileNameAndType(belongingApplicationName, fileName, type)
+        return configDomainRepository.findByBelongingApplicationNameAndFileNameAndTypeAndStatus(belongingApplicationName, fileName, type, ConfigStatus.ENABLE)
                 .map(converter::toDTO)
                 .orElse(new ConfigResponseDTO());
     }
