@@ -5,7 +5,7 @@ import com.flz.configservice.starter.properties.ConfigCenterProperties;
 public class ConfigCenterClientFactory {
     private static volatile ConfigCenterClient configCenterClient;
 
-    public static ConfigCenterClient getInstance(ConfigCenterProperties properties) {
+    public static ConfigCenterClient init(ConfigCenterProperties properties) {
         if (configCenterClient == null) {
             synchronized (ConfigCenterClientFactory.class) {
                 if (configCenterClient == null) {

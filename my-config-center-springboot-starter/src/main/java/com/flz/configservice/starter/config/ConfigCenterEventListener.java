@@ -25,7 +25,7 @@ public class ConfigCenterEventListener implements ApplicationListener<Applicatio
         ConfigurableEnvironment environment = event.getEnvironment();
         String url = environment.resolvePlaceholders("${myconfigcenter.url}");
         ConfigCenterProperties configCenterProperties = new ConfigCenterProperties(url);
-        ConfigCenterClient configCenterClient = ConfigCenterClientFactory.getInstance(configCenterProperties);
+        ConfigCenterClient configCenterClient = ConfigCenterClientFactory.init(configCenterProperties);
         String[] activeProfiles = environment.getActiveProfiles();
         String fileName = "application";
         if (activeProfiles.length > 0) {
