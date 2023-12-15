@@ -15,4 +15,8 @@ public class ConfigCenterClientFactory {
         }
         return configCenterClient;
     }
+
+    public static ConfigCenterClient get() {
+        return configCenterClient;
+    }
 }

@@ -2,5 +2,3 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.flz.configservice.starter.config.ConfigCenterAutoConfiguration
 org.springframework.context.ApplicationListener=\
 com.flz.configservice.starter.config.ConfigCenterEventListener
-org.springframework.beans.factory.config.BeanPostProcessor=\
-com.flz.configservice.starter.dynamic.DynamicValuePostProcessor
