@@ -1,9 +1,12 @@
 package com.flz.registryservice.application.service;
 
+import com.flz.common.exception.BusinessException;
+import com.flz.registryservice.converter.RegistryServiceConverter;
 import com.flz.registryservice.domain.aggregate.ServiceInfo;
 import com.flz.registryservice.domain.aggregate.ServiceInstance;
 import com.flz.registryservice.domain.repository.ServiceInfoDomainRepository;
 import com.flz.registryservice.presentation.dto.ServiceInfoRegisterRequestDTO;
+import com.flz.registryservice.presentation.dto.ServiceInfoResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +17,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ServiceInfoService {
     private final ServiceInfoDomainRepository serviceInfoDomainRepository;
+    private final RegistryServiceConverter registryServiceConverter = RegistryServiceConverter.INSTANCE;
 
     @Transactional
     public void register(ServiceInfoRegisterRequestDTO requestDTO) {
@@ -36,5 +40,12 @@ public class ServiceInfoService {
                 .findFirst()
                 .ifPresentOrElse(ServiceInstance::refresh, () -> serviceInfo.addInstance(requestDTO.getHost(), requestDTO.getPort()));
         serviceInfoDomainRepository.save(serviceInfo);
+    }
+
+    public ServiceInfoResponseDTO fetchServiceInfo(String name) {
+        return serviceInfoDomainRepository.findByName(name)
+                .map(registryServiceConverter::toDTO)
+                .orElseThrow(() -> new BusinessException("service info not found with name:" + name));
+
     }
 }
