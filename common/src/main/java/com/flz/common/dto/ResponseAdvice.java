@@ -12,7 +12,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 public class ResponseAdvice implements ResponseBodyAdvice<Object> {
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-        return returnType.getParameterType().isAssignableFrom(ResponseResult.class);
+        Class<?> parameterType = returnType.getParameterType();
+        return parameterType.isAssignableFrom(ResponseResult.class) || parameterType.isAssignableFrom(Void.class);
     }
 
     @Override
