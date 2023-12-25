@@ -13,7 +13,7 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         Class<?> parameterType = returnType.getParameterType();
-        return parameterType.isAssignableFrom(ResponseResult.class) || parameterType.isAssignableFrom(Void.class);
+        return !parameterType.isAssignableFrom(ErrorResult.class);
     }
 
     @Override
