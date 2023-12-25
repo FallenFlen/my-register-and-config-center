@@ -12,6 +12,7 @@
         <module>common</module>
         <module>my-config-center-springboot-starter</module>
         <module>demo</module>
+        <module>registry-service</module>
     </modules>
     <packaging>pom</packaging>
 
